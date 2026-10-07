@@ -247,7 +247,7 @@ h1,h2,h3{font-weight:700}
    <li><i>01</i>Content và Copywriting khác nhau ở đâu?</li>
    <li><i>02</i>Doanh nghiệp thực sự cần gì ở người viết?</li>
    <li><i>03</i>Nếu muốn đi theo nghề viết, bạn nên bắt đầu từ đâu?</li>
-   <li class="doc"><i>04</i><span>Tài liệu: phát triển cách một bài viết hay trở thành bài copywriting giúp doanh nghiệp chuyển đổi</span></li>
+   <li class="doc"><i>04</i><span>Tài liệu: Bài viết hay trở thành bài copywriting giúp doanh nghiệp chuyển đổi</span></li>
   </ul>
  </div>
 </section>
@@ -275,7 +275,7 @@ h1,h2,h3{font-weight:700}
     <p>Mà để biết:<br>“Mình thích việc này.”<br>“Mình làm được việc này.”</p>
     <p>Marketing Club đang mở đơn Gen 5 cho sinh viên năm 1–2.</p>
     <p>Không cần kinh nghiệm. Bạn vào đây để bắt đầu có kinh nghiệm.</p>
-    <p class="hl" style="margin:0">Nếu bạn muốn đời sinh viên có nhiều trải nghiệm bổ ích, có thể ghi vào CV gây ấn tượng với doanh nghiệp thì gửi thông tin của bạn vào link phía dưới để tham gia Gen 5, trước ngày 15/10 nha.</p>
+    <p class="hl" style="margin:0">👉 Nếu bạn muốn đời sinh viên có nhiều trải nghiệm bổ ích, có thể ghi vào CV gây ấn tượng với doanh nghiệp thì gửi thông tin của bạn vào link phía dưới để tham gia Gen 5, trước ngày 15/10 nha.</p>
    </article>
   </div>
  </div>
@@ -451,8 +451,8 @@ var SPEAKER_PHOTO = "";
     var fin = false;
     function once(fn){ return function(){ if (!fin){ fin = true; fn(); } }; }
     var okOnce = once(ok), failOnce = once(fail);
-    setTimeout(okOnce, 8000); /* Apps Script đôi khi phản hồi chậm; tránh nút bị treo ở "Đang gửi…" */
-    fetch(SHEET_URL, {method:"POST", mode:"no-cors", headers:{"Content-Type":"text/plain;charset=utf-8"}, body: JSON.stringify(d)}).then(okOnce).catch(failOnce);
+    setTimeout(okOnce, 2000); /* Apps Script đôi khi phản hồi chậm; tránh nút bị treo ở "Đang gửi…" */
+    fetch(SHEET_URL, {method:"POST", mode:"no-cors", keepalive:true, headers:{"Content-Type":"text/plain;charset=utf-8"}, body: JSON.stringify(d)}).then(okOnce).catch(failOnce);
   }
   function show(el){ el.classList.add("show"); el.scrollIntoView({behavior:"smooth", block:"start"}); if (el.tabIndex === -1) el.focus({preventScroll:true}); }
 
