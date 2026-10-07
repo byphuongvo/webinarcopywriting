@@ -212,6 +212,11 @@ h1,h2,h3{font-weight:700}
 .why.who .callout{font-weight:400;color:#fff;margin-top:18px}
 .get li.doc{grid-column:1/-1}
 .get li.doc span{color:inherit;font-size:inherit}
+/* cân layout lưới: không còn ô trống */
+.get ul{grid-template-columns:repeat(2,1fr)}
+.get li.doc{grid-column:auto}
+.who li:last-child:nth-child(odd){grid-column:1/-1}
+@media(max-width:820px){.get ul{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
@@ -247,7 +252,7 @@ h1,h2,h3{font-weight:700}
    <li><i>01</i>Content và Copywriting khác nhau ở đâu?</li>
    <li><i>02</i>Doanh nghiệp thực sự cần gì ở người viết?</li>
    <li><i>03</i>Nếu muốn đi theo nghề viết, bạn nên bắt đầu từ đâu?</li>
-   <li><i>04</i><span>Tài liệu: Biến bài viết hay thành Copywriting tạo chuyển đổi</li>
+   <li class="doc"><i>04</i><span>Tài liệu: cách đưa một bài viết hay trở thành bài copywriting giúp doanh nghiệp chuyển đổi</span></li>
   </ul>
  </div>
 </section>
