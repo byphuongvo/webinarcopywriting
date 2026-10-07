@@ -181,6 +181,7 @@ var CHOICES = ["Bài 1", "Bài 2", "Cả hai", "Không bài nào"];
 
 function render(rows){
   var n = rows.length;
+  var nr = rows.filter(function(r){ return r.info || r.action || r.style; }).length; /* số người đã làm bài thử */
   $("out").classList.remove("hidden");
   var conf = rows.map(function(r){ return Number(r.confidence); }).filter(Boolean);
   var avg = conf.length ? conf.reduce(function(a, b){ return a + b; }, 0) / conf.length : 0;
@@ -189,7 +190,7 @@ function render(rows){
   $("kpis").innerHTML = [
     [n, "người đăng ký"],
     [conf.length ? avg.toFixed(1) + " / 5" : "–", "tự tin phân biệt, trung bình"],
-    [pct(act2, n) + "%", "hành động theo Bài 2"],
+    [pct(act2, nr) + "%", "hành động theo Bài 2 (" + nr + " người làm bài thử)"],
     [pct(link, n) + "%", "để lại link bài viết"]
   ].map(function(k){ return '<div class="kpi"><b>' + k[0] + '</b><span>' + k[1] + '</span></div>'; }).join("");
 
@@ -197,15 +198,15 @@ function render(rows){
   $("pair").innerHTML = CHOICES.map(function(c){
     var a = info[c] || 0, b = act[c] || 0;
     return '<div class="grp"><div class="lab">' + c + '</div>' +
-      '<div class="r"><span>Rõ thông tin</span><div class="track"><div class="fill a" style="width:' + pct(a, n) + '%"></div></div><span class="val">' + a + ' · ' + pct(a, n) + '%</span></div>' +
-      '<div class="r"><span>Hành động</span><div class="track"><div class="fill b" style="width:' + pct(b, n) + '%"></div></div><span class="val">' + b + ' · ' + pct(b, n) + '%</span></div></div>';
+      '<div class="r"><span>Rõ thông tin</span><div class="track"><div class="fill a" style="width:' + pct(a, nr) + '%"></div></div><span class="val">' + a + ' · ' + pct(a, nr) + '%</span></div>' +
+      '<div class="r"><span>Hành động</span><div class="track"><div class="fill b" style="width:' + pct(b, nr) + '%"></div></div><span class="val">' + b + ' · ' + pct(b, nr) + '%</span></div></div>';
   }).join("");
   var i1 = info["Bài 1"] || 0, a2 = act["Bài 2"] || 0, a1 = act["Bài 1"] || 0;
-  $("insight").innerHTML = n ? '<b>Đọc nhanh:</b> ' + pct(i1, n) + '% thấy Bài 1 cho biết rõ thông tin, và ' + pct(a2, n) + '% hành động theo Bài 2 (so với ' + pct(a1, n) + '% theo Bài 1). ' +
+  $("insight").innerHTML = nr ? '<b>Đọc nhanh:</b> ' + pct(i1, nr) + '% thấy Bài 1 cho biết rõ thông tin, và ' + pct(a2, nr) + '% hành động theo Bài 2 (so với ' + pct(a1, nr) + '% theo Bài 1). ' +
     (a2 > a1 ? 'Đúng điều webinar muốn nói: bài đầy đủ thông tin chưa chắc là bài khiến người ta hành động.' : 'Số liệu lần này nghiêng về Bài 1. Đây cũng là một điểm để thảo luận trong buổi.') : "";
 
-  bars($("part"), tally(rows, "act_part", true), n);
-  bars($("style"), tally(rows, "style"), n);
+  bars($("part"), tally(rows, "act_part", true), nr);
+  bars($("style"), tally(rows, "style"), nr);
 
   // heatmap
   var styles = ["Giống Bài 1", "Giống Bài 2", "Có cả hai", "Chưa viết bài kiểu này"];
@@ -231,9 +232,9 @@ function render(rows){
     return '<div class="col' + (String(k) === ctop ? ' top' : '') + '"><b>' + v + '</b><div class="b" style="height:' + (v / cmax * 100) + '%"></div><small>' + k + '</small></div>';
   }).join("");
 
-  bars($("role"), tally(rows, "role"), n); bars($("direction"), tally(rows, "direction"), n);
-  bars($("want"), tally(rows, "want", true), n); bars($("exp"), tally(rows, "exp", true), n);
-  bars($("source"), tally(rows, "source"), n);
+  bars($("role"), tally(rows, "role"), n); bars($("direction"), tally(rows, "direction"), nr);
+  bars($("want"), tally(rows, "want", true), nr); bars($("exp"), tally(rows, "exp", true), nr);
+  bars($("source"), tally(rows, "source"), nr);
   drawLine(rows);
 }
 
