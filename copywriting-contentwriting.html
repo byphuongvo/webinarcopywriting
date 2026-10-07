@@ -457,10 +457,18 @@ var SPEAKER_PHOTO = "";
   });
 
   var f = $("f"), sv = $("sv");
+  /* các nút "Đăng ký" cuộn tới form bằng JS, không phụ thuộc thẻ <base> hay trình duyệt trong app */
+  document.querySelectorAll('a[href="#dang-ky"]').forEach(function(a){
+    a.addEventListener("click", function(e){ e.preventDefault(); $("dang-ky").scrollIntoView({behavior:"smooth", block:"start"}); });
+  });
   function vals(root, name){ return Array.prototype.map.call(root.querySelectorAll('[name="'+name+'"]:checked'), function(e){return e.value}); }
   function send(d, ok, fail){
     if (!SHEET_URL){ try{ console.log("Dữ liệu (xem thử):", d); }catch(e){} $("demo").style.display = "block"; ok(); return; }
-    fetch(SHEET_URL, {method:"POST", mode:"no-cors", headers:{"Content-Type":"text/plain;charset=utf-8"}, body: JSON.stringify(d)}).then(ok).catch(fail);
+    var fin = false;
+    function once(fn){ return function(){ if (!fin){ fin = true; fn(); } }; }
+    var okOnce = once(ok), failOnce = once(fail);
+    setTimeout(okOnce, 8000); /* Apps Script đôi khi phản hồi chậm; tránh nút bị treo ở "Đang gửi…" */
+    fetch(SHEET_URL, {method:"POST", mode:"no-cors", headers:{"Content-Type":"text/plain;charset=utf-8"}, body: JSON.stringify(d)}).then(okOnce).catch(failOnce);
   }
   function show(el){ el.classList.add("show"); el.scrollIntoView({behavior:"smooth", block:"start"}); if (el.tabIndex === -1) el.focus({preventScroll:true}); }
 
