@@ -470,14 +470,20 @@ var SPEAKER_PHOTO = "";
     var first = null, good = true;
     ["name","email","phone"].forEach(function(id){
       var el = $(id), v = el.value.trim();
-      var okv = v && (id !== "email" || /^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(v)) && (id !== "phone" || /^[+()\d\s.-]{9,15}$/.test(v) && v.replace(/\D/g,"").length >= 9);
+      var okv = v && (id !== "email" || /^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(v)) && (id !== "phone" || /^[+()\d\s.-]+$/.test(v) && v.replace(/\D/g,"").length >= 9 && v.replace(/\D/g,"").length <= 13);
       el.style.borderColor = okv ? "" : "#C73A1B";
       if (!okv){ good = false; first = first || el; }
     });
     var hasRole = vals(f,"role").length > 0;
     f.querySelector('[data-err="role"]').textContent = hasRole ? "" : "Chọn một mục";
     if (!hasRole){ good = false; first = first || f.querySelector('[data-req="role"]'); }
-    $("formerr").textContent = good ? "" : "Còn vài mục chưa điền, mình đã đánh dấu giúp bạn.";
+    var m = "";
+    if (!good){
+      var bad = ["name","email","phone"].filter(function(id){ return $(id).style.borderColor; }).map(function(id){ return {name:"Họ và tên",email:"Email (ví dụ ten@gmail.com)",phone:"Số điện thoại (9–13 chữ số)"}[id]; });
+      if (!hasRole) bad.push("mục “Bạn hiện là”");
+      m = "Bạn kiểm tra lại giúp mình: " + bad.join(", ") + ".";
+    }
+    $("formerr").textContent = m;
     if (!good){ first.scrollIntoView({behavior:"smooth", block:"center"}); return; }
     if (f.website.value) return;
     var d = { stage:"register", time:new Date().toISOString(), name:f.name.value.trim(), email:f.email.value.trim(), phone:f.phone.value.trim(), role:vals(f,"role")[0], consent:"Đồng ý" };
