@@ -327,7 +327,7 @@ blockquote{margin:20px 0;padding:6px 0 6px 20px;border-left:5px solid var(--acce
      <div class="field"><label class="q" for="name">Họ và tên</label><input id="name" name="name" type="text" autocomplete="name" required></div>
      <div class="field"><label class="q" for="email">Email nhận link Zoom</label><input id="email" name="email" type="email" autocomplete="email" required></div>
     </div>
-    <div class="field"><label class="q" for="phone">Số điện thoại / Zalo <small>không bắt buộc</small></label><input id="phone" name="phone" type="tel" autocomplete="tel" inputmode="tel"></div>
+    <div class="field"><label class="q" for="phone">Số điện thoại / Zalo</label><input id="phone" name="phone" type="tel" autocomplete="tel" inputmode="tel" required></div>
     <div class="field" data-req="role">
      <div class="q" id="q-role">Bạn hiện là:</div>
      <div class="opts" role="radiogroup" aria-labelledby="q-role">
@@ -468,9 +468,9 @@ var SPEAKER_PHOTO = "";
   f.addEventListener("submit", function(e){
     e.preventDefault();
     var first = null, good = true;
-    ["name","email"].forEach(function(id){
+    ["name","email","phone"].forEach(function(id){
       var el = $(id), v = el.value.trim();
-      var okv = v && (id !== "email" || /^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(v));
+      var okv = v && (id !== "email" || /^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(v)) && (id !== "phone" || /^[+()\d\s.-]{9,15}$/.test(v) && v.replace(/\D/g,"").length >= 9);
       el.style.borderColor = okv ? "" : "#C73A1B";
       if (!okv){ good = false; first = first || el; }
     });
