@@ -76,7 +76,6 @@ svg text{font-family:var(--f)}
  <p class="sub">Số liệu và biểu đồ từ form đăng ký. Dán vào slide hoặc dùng để chỉnh trọng tâm buổi nói.</p>
 
  <div class="bar">
-  <input id="key" type="password" placeholder="Mã xem kết quả (VIEW_KEY trong Apps Script)" autocomplete="off" aria-label="Mã xem kết quả">
   <button class="btn" id="load">Tải dữ liệu thật</button>
   <button class="btn ghost" id="demoBtn">Xem dữ liệu mẫu</button>
   <div class="status" id="status">Chưa tải dữ liệu.</div>
@@ -260,18 +259,19 @@ function setStatus(t, err){ var s = $("status"); s.textContent = t; s.className 
 
 $("load").addEventListener("click", function(){
   if (!SHEET_URL) { setStatus("Chưa gắn SHEET_URL trong dashboard.html. Dán link Web App vào đầu phần script.", true); return; }
-  var key = $("key").value.trim();
-  if (!key) { setStatus("Nhập mã xem kết quả.", true); return; }
   setStatus("Đang tải…");
-  fetch(SHEET_URL + (SHEET_URL.indexOf("?") > -1 ? "&" : "?") + "key=" + encodeURIComponent(key))
+  fetch(SHEET_URL)
     .then(function(r){ return r.json(); })
     .then(function(j){
-      if (!j.ok) { setStatus(j.error === "unauthorized" ? "Mã không đúng." : "Chưa lấy được dữ liệu.", true); return; }
+      if (!j.ok) { setStatus("Chưa lấy được dữ liệu.", true); return; }
       $("demo").classList.remove("on");
       render(j.rows); setStatus("Đã tải " + j.rows.length + " câu trả lời lúc " + new Date().toLocaleTimeString("vi-VN") + ".");
     })
     .catch(function(){ setStatus("Không tải được. Kiểm tra link Web App và đã triển khai ở chế độ “Bất kỳ ai”.", true); });
 });
+
+/* tự tải dữ liệu thật khi mở trang */
+if (SHEET_URL) $("load").click();
 
 /* dữ liệu mẫu có hạt giống cố định */
 $("demoBtn").addEventListener("click", function(){
